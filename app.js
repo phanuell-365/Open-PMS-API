@@ -1,20 +1,40 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+// jshint esversion:9
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+"use strict";
 
-var app = express();
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const session = require("express-session");
 
-app.use(logger('dev'));
+const Sessions = require("./models/sessions");
+
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+
+const app = express();
+
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.disable("x-powered-by");
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: Sessions,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 7 * 2, // 2 weeks in milliseconds (2 weeks) * 24 hours in a day * 7 days in a week * 1000 milliseconds in a second
+    },
+  })
+);
+
+Sessions.sync();
+
+app.use("/", indexRouter);
+app.use("/users", usersRouter);
 
 module.exports = app;

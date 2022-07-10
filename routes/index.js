@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+const handlers = require("../controllers/index");
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+// eslint-disable-next-line no-unused-vars
+router.route("/").get(handlers.get).post(handlers.post).delete(handlers.delete);
 
 module.exports = router;

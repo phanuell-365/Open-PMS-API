@@ -1,9 +1,15 @@
-var express = require('express');
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+// eslint-disable-next-line no-unused-vars
+router.get("/", (req, res, next) => {
+  if (req.session.viewCount) {
+    req.session.viewCount++;
+  } else {
+    req.session.viewCount = 1;
+  }
+  res.json(`You have visited this page ${req.session.viewCount} times`);
 });
 
 module.exports = router;
