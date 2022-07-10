@@ -1,8 +1,16 @@
-const sequelize = require("config.db");
+// jshint esversion:9
+
+"use strict";
+
+const sequelize = require("../models/config.db");
 const bcrypt = require("bcrypt");
 const { Model, DataTypes } = require("sequelize");
 
-class User extends Model {}
+class User extends Model {
+  static validatePassword(password, userPassword) {
+    return bcrypt.compareSync(password, userPassword);
+  }
+}
 
 User.init(
   {
@@ -31,11 +39,23 @@ User.init(
         isEmail: true,
       },
     },
+
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      len: [10, 10],
+      validate: {
+        notNull: {
+          msg: "Phone number is required",
+        },
+      },
+    },
     role: {
       type: DataTypes.ENUM,
       values: ["admin", "pharmacist", "salesperson"],
       allowNull: false,
-      defaultValue: "user",
+      defaultValue: "pharmacist",
     },
   },
   {
@@ -43,18 +63,15 @@ User.init(
       beforeCreate(attributes, options) {
         attributes.id = attributes.id || DataTypes.UUIDV4();
 
-        attributes.password = (async () => {
-          const salt = await bcrypt.genSalt(10);
-          return await bcrypt.hash(attributes.password, salt);
+        attributes.password = (() => {
+          const salt = bcrypt.genSaltSync(10);
+          return bcrypt.hashSync(attributes.password, salt);
         })();
-      },
-    },
-    instanceMethods: {
-      comparePassword(password) {
-        return bcrypt.compare(password, this.password);
       },
     },
     sequelize,
     modelName: "User",
   }
 );
+
+module.exports = User;
