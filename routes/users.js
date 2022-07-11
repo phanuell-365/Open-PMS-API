@@ -6,6 +6,12 @@ const express = require("express");
 const router = express.Router();
 const usersHandler = require("../controllers/users");
 const passport = require("passport");
+const {
+  isAuthenticated,
+  isAdmin,
+  isPharmacist,
+  isSalesPerson,
+} = require("../security/authentication");
 // const User = require("../models/users");
 
 /* Add authentication middleware */
@@ -19,9 +25,9 @@ router.use(passport.session());
 // eslint-disable-next-line no-unused-vars
 router
   .route("/")
-  .get(usersHandler.getUsers)
-  .post(usersHandler.createUser)
-  .delete(usersHandler.deleteUsers);
+  .get(isAdmin, usersHandler.getUsers)
+  .post(isAdmin, usersHandler.createUser)
+  .delete(isAdmin, usersHandler.deleteUsers);
 
 router.route("/logout").post(usersHandler.logout);
 

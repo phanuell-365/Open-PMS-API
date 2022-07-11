@@ -21,6 +21,6 @@ app.disable("x-powered-by");
 app.use(sessions);
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/api/users", usersRouter);
 
 module.exports = app;
