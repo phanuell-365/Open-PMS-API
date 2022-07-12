@@ -2,23 +2,23 @@
 
 "use strict";
 
-class Error400 extends Error {
+class Error500 extends Error {
   constructor(message, ...params) {
     super(...params);
 
     // Maintains proper stack trace for where our error was thrown (only available on V8)
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, Error400);
+      Error.captureStackTrace(this, Error500);
     }
 
-    this.name = "Error400";
+    this.name = "Error401";
 
     if (!message) {
-      message = "Error! Bad Request!";
+      message = "Error! Internal Server Error!";
     }
     this.message = message;
-    this.status = 400;
+    this.status = 500;
   }
 }
 
-module.exports = Error400;
+module.exports = Error500;

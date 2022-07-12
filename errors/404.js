@@ -17,6 +17,7 @@ class Error404 extends Error {
       message = "Error! Not Found!";
     }
     this.message = message;
+    this.status = 404;
   }
 }
 

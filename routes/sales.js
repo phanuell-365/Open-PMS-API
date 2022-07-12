@@ -1,6 +1,10 @@
+// jshint esversion:9
+
+"use strict";
+
 const express = require("express");
 const router = express.Router();
-const handlers = require("../controllers/index");
+const handlers = require("../controllers/sales");
 
 /* GET home page. */
 // eslint-disable-next-line no-unused-vars

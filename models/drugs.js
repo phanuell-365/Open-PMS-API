@@ -2,7 +2,7 @@
 
 "use strict";
 
-const sequelize = require("../models/config.db");
+const sequelize = require("../config/config.db");
 const { Model, DataTypes } = require("sequelize");
 const {
   validDrugForms,

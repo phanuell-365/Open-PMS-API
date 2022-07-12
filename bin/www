@@ -11,7 +11,7 @@
 const app = require("../app");
 const debug = require("debug")("restechs-opms:server");
 const http = require("http");
-const sequelize = require("../models/config.db");
+const sequelize = require("../config/config.db");
 
 /**
  * Get port from environment and store in Express.

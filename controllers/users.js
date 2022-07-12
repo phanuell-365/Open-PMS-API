@@ -3,8 +3,49 @@
 "use strict";
 
 const User = require("../models/users");
+const Error401 = require("../errors/401");
+const issueJWT = require("../security/issueJWT");
+const output = require("../output/users");
 
 module.exports = {
+  login(req, res, next) {
+    const { username, password } = req.body;
+
+    User.findOne({ where: { username: username } })
+
+      .then((user) => {
+        if (!user) {
+          throw new Error401("Invalid username or password.");
+        }
+
+        const isValid = User.validatePassword(password, user.password);
+
+        if (!isValid) {
+          throw new Error401("Invalid password!");
+        } else {
+          const tokenObject = issueJWT(user);
+
+          const userObj = output.user(user);
+
+          res.status(200).json({
+            success: true,
+            user: userObj,
+            token: tokenObject.token,
+            expiresIn: tokenObject.expires,
+          });
+        }
+      })
+      .catch(next);
+  },
+
+  logout(req, res, next) {},
+
+  logInFailed(req, res) {
+    res.status(401).json({
+      message: "Login failed.",
+    });
+  },
+
   /**
    * @description - This method is used to get the user's profile.
    * @param req
@@ -12,9 +53,14 @@ module.exports = {
    */
   getUsers(req, res) {
     User.findAll().then((users) => {
-      res.status(200).json(users);
+      const foundUsers = [];
+
+      users.forEach((user) => {
+        foundUsers.push(output.user(user));
+      });
+
+      res.status(200).json(foundUsers);
     });
-    console.log("All the authenticated users are: ", req.session.passport);
   },
 
   /**
@@ -25,6 +71,7 @@ module.exports = {
    */
   createUser(req, res, next) {
     const { username, password, email, phone, role } = req.body;
+
     const user = {
       username,
       password,
@@ -46,28 +93,6 @@ module.exports = {
       .catch(next);
   },
 
-  login(req, res, next) {
-    if (req.isAuthenticated()) {
-      res.status(200).json({
-        message: `User ${req.user.username} logged in successfully.`,
-      });
-    } else {
-      res.status(401).json({
-        message: `User ${req.user.username} failed to login.`,
-      });
-    }
-  },
-
-  logout(req, res, next) {
-    console.log("Logging out...");
-    console.log("The request object is: ", req);
-    const user = req.user;
-    req.logout(next);
-    res.status(200).json({
-      message: `User ${user.username} logged out successfully.`,
-    });
-  },
-
   /**
    * Deletes all users
    * @param req
@@ -85,9 +110,9 @@ module.exports = {
     }
   },
 
-  logInFailed(req, res) {
-    res.status(401).json({
-      message: "Login failed.",
-    });
-  },
+  /**
+   * Controllers for routes for specific users
+   */
+
+  getUserById(req, res, next) {},
 };

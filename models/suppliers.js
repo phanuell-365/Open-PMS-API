@@ -2,7 +2,7 @@
 
 "use strict";
 
-const sequelize = require("config.db");
+const sequelize = require("config/config.db");
 const { Model, DataTypes } = require("sequelize");
 
 class Supplier extends Model {}
