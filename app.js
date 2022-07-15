@@ -9,7 +9,7 @@ const passport = require("passport");
 const Error404 = require("./errors/404");
 
 const errorHandler = require("./middlewares/error.middleware");
-// const defaultUser = require("./config/create.user");
+const defaultUser = require("./config/create.user");
 
 const usersRouter = require("./routes/users");
 const drugsRouter = require("./routes/drugs");
@@ -21,7 +21,7 @@ const deliveriesRouter = require("./routes/deliveries.route");
 const app = express();
 
 // create a new user if not exists
-// app.all("*", defaultUser);
+app.get("/api", defaultUser);
 
 // log requests to the console
 app.use(logger("dev"));
