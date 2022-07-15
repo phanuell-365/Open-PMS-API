@@ -15,7 +15,7 @@ module.exports = {
    * @param res
    * @param next
    */
-  get: (req, res, next) => {
+  getAllDrugs: (req, res, next) => {
     Drug.findAll()
       .then(drugs => {
 
@@ -33,7 +33,7 @@ module.exports = {
       .catch(next);
   },
 
-  post: (req, res, next) => {
+  createDrug: (req, res, next) => {
 
     console.log("Creating drug ...");
 
@@ -72,7 +72,7 @@ module.exports = {
       .catch(next);
   },
 
-  delete: (req, res) => {
+  deleteAllDrugs: (req, res) => {
     res.json({
       message: "Hello World!"
     });
@@ -105,10 +105,10 @@ module.exports = {
 
   },
 
-  updateDrugById: (req, res, next) => {
+  updateDrug: (req, res, next) => {
     const { id } = req.params;
 
-    if (!req.body.name || !req.body.doseForm || !req.body.strength || !req.body.levelOfUse) {
+    if (!req.body.name || !req.body.doseForm || !req.body.strength || !req.body.levelOfUse || !req.body.therapeuticClass || !req.body.issueUnit || !req.body.issueUnitPrice || !req.body.expiryDate) {
       throw new Error400("Invalid request body.");
     }
 
@@ -176,7 +176,7 @@ module.exports = {
       .catch(next);
   },
 
-  deleteDrugById: (req, res, next) => {
+  deleteDrug: (req, res, next) => {
     const { id } = req.params;
 
     Drug.findByPk(id)
