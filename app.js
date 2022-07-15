@@ -9,15 +9,19 @@ const passport = require("passport");
 const Error404 = require("./errors/404");
 
 const errorHandler = require("./middlewares/error.middleware");
+// const defaultUser = require("./config/create.user");
 
 const usersRouter = require("./routes/users");
 const drugsRouter = require("./routes/drugs");
 const suppliersRouter = require("./routes/suppliers");
 const ordersRouter = require("./routes/orders");
 const salesRouter = require("./routes/sales");
-const deliveriesRouter = require("./routes/deliveries");
+const deliveriesRouter = require("./routes/deliveries.route");
 
 const app = express();
+
+// create a new user if not exists
+// app.all("*", defaultUser);
 
 // log requests to the console
 app.use(logger("dev"));
@@ -61,8 +65,8 @@ app.use("/api/sales", salesRouter);
 app.use("/api/deliveries", deliveriesRouter);
 
 // catch 404 and forward to error handler
-app.get("*", (req, res) => {
-  throw new Error404("Not Found");
+app.all("*", (req, res) => {
+  throw new Error404("Page not found.");
 });
 
 app.use(errorHandler);

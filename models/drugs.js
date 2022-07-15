@@ -7,10 +7,11 @@ const { Model, DataTypes } = require("sequelize");
 const {
   validDrugForms,
   validDrugStrengthMeasurements,
-  validIssueUnits,
+  validIssueUnits
 } = require("../data/drugs");
 
-class Drug extends Model {}
+class Drug extends Model {
+}
 
 Drug.init(
   {
@@ -19,56 +20,59 @@ Drug.init(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false,
-      unique: true,
+      unique: true
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: true
     },
     doseForm: {
       type: DataTypes.ENUM,
       values: validDrugForms,
-      allowNull: false,
+      allowNull: false
     },
     strength: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
-          msg: "Strength is required",
-        },
+          msg: "Strength is required"
+        }
       },
       isValidDrugStrength(value) {
         if (!value.includes(validDrugStrengthMeasurements)) {
           throw new Error("Invalid drug strength");
         }
-      },
+      }
     },
     levelOfUse: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     therapeuticClass: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: false
     },
     issueUnit: {
       type: DataTypes.ENUM,
       values: validIssueUnits,
-      allowNull: false,
+      allowNull: false
     },
     issueUnitPrice: {
       type: DataTypes.FLOAT,
-      allowNull: false,
+      allowNull: false
     },
     expiryDate: {
       type: DataTypes.DATE,
-      allowNull: false,
-    },
+      allowNull: false
+    }
   },
   {
     sequelize,
-    modelName: "Drug",
+    modelName: "Drug"
   }
 );
+
+
+module.exports = Drug;

@@ -2,25 +2,198 @@
 
 "use strict";
 
+const Drug = require("../models/drugs");
+const Error400 = require("../errors/400");
+const output = require("../output/drugs");
+
 module.exports = {
-  get: (req, res) => {
-    if (req.session.viewCount) {
-      req.session.viewCount++;
-    } else {
-      req.session.viewCount = 1;
-    }
-    res.json(`You have visited this page ${req.session.viewCount} times`);
+
+  /**
+   * @description - This method is used to get all drugs from the database.
+   * @api {get} /drugs/ Get all drugs
+   * @param req
+   * @param res
+   * @param next
+   */
+  get: (req, res, next) => {
+    Drug.findAll()
+      .then(drugs => {
+
+        if (drugs.length === 0) {
+          throw new Error400("No drugs found.");
+        }
+
+        const drugList = output.drugList(drugs);
+
+        res.status(200).json({
+          success: true,
+          drugs: drugList
+        });
+      })
+      .catch(next);
   },
 
-  post: (req, res) => {
-    res.json({
-      message: "Hello World!",
-    });
+  post: (req, res, next) => {
+
+    console.log("Creating drug ...");
+
+    if (!req.body.name || !req.body.doseForm || !req.body.strength || !req.body.levelOfUse) {
+      throw new Error400("Invalid request body.");
+    }
+
+    const {
+      name,
+      doseForm,
+      strength,
+      levelOfUse,
+      therapeuticClass,
+      issueUnit,
+      issueUnitPrice,
+      expiryDate
+    } = req.body;
+
+    Drug.create({
+      name: name,
+      doseForm: doseForm,
+      strength: strength,
+      levelOfUse: levelOfUse,
+      therapeuticClass: therapeuticClass,
+      issueUnit: issueUnit,
+      issueUnitPrice: issueUnitPrice,
+      expiryDate: expiryDate
+    })
+      .then(drug => {
+        res.status(200).json({
+          success: true,
+          message: "Drug created successfully.",
+          drug: output.drug(drug)
+        });
+      })
+      .catch(next);
   },
 
   delete: (req, res) => {
     res.json({
-      message: "Hello World!",
+      message: "Hello World!"
     });
   },
+
+  /**
+   * @description - This method is used to get a drug from the database.
+   * @api {get} /drugs/:id Get drug
+   * @param req - The request object
+   * @param res - The response object
+   * @param next - This is used to pass the control to the next middleware
+   */
+  getDrugById: (req, res, next) => {
+
+    const { id } = req.params;
+
+    Drug.findByPk(id)
+      .then(drug => {
+
+        if (!drug) {
+          throw new Error400("Drug not found.");
+        }
+        res.status(200).json({
+          success: true,
+          message: "Drug retrieved successfully.",
+          drug: output.drug(drug)
+        });
+      })
+      .catch(next);
+
+  },
+
+  updateDrugById: (req, res, next) => {
+    const { id } = req.params;
+
+    if (!req.body.name || !req.body.doseForm || !req.body.strength || !req.body.levelOfUse) {
+      throw new Error400("Invalid request body.");
+    }
+
+    const {
+      name,
+      doseForm,
+      strength,
+      levelOfUse,
+      therapeuticClass,
+      issueUnit,
+      issueUnitPrice,
+      expiryDate
+    } = req.body;
+
+    Drug.findByPk(id)
+      .then(drug => {
+
+        if (!drug) {
+          throw new Error400("Drug not found.");
+        }
+
+        return drug.update({
+          name: name,
+          doseForm: doseForm,
+          strength: strength,
+          levelOfUse: levelOfUse,
+          therapeuticClass: therapeuticClass,
+          issueUnit: issueUnit,
+          issueUnitPrice: issueUnitPrice,
+          expiryDate: expiryDate
+        });
+
+      })
+      .then(drug => {
+        res.status(200).json({
+          success: true,
+          message: "Drug updated successfully.",
+          drug: output.drug(drug)
+        });
+      })
+      .catch(next);
+  },
+
+  updateDrugAttributes: (req, res, next) => {
+    const { id } = req.params;
+
+    const reqDrug = req.body;
+
+    // Update the drug in the database
+    // ...
+
+    Drug.findByPk(id)
+      .then((drug) => {
+        if (!drug) {
+          throw new Error400("Drug not found.");
+        }
+
+        return drug.update(reqDrug);
+      })
+      .then((drug) => {
+        res.status(200).json({
+          message: `Drug ${drug.name} updated successfully.`
+        });
+      })
+      .catch(next);
+  },
+
+  deleteDrugById: (req, res, next) => {
+    const { id } = req.params;
+
+    Drug.findByPk(id)
+      .then(drug => {
+
+        if (!drug) {
+          throw new Error400("Drug not found.");
+        }
+
+        return drug.destroy();
+      })
+      .then(() => {
+        res.status(200).json({
+          success: true,
+          message: "Drug deleted successfully."
+        });
+      })
+      .catch(next);
+  }
 };
