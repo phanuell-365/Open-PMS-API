@@ -2,10 +2,11 @@
 
 "use strict";
 
-const sequelize = require("config/config.db");
+const sequelize = require("../config/config.db");
 const { Model, DataTypes } = require("sequelize");
 
-class Supplier extends Model {}
+class Supplier extends Model {
+}
 
 Supplier.init(
   {
@@ -14,12 +15,17 @@ Supplier.init(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false,
-      unique: true,
+      unique: true
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+      validate: {
+        notNull: {
+          msg: "Name is required"
+        }
+      }
     },
     email: {
       type: DataTypes.STRING,
@@ -28,9 +34,9 @@ Supplier.init(
       validate: {
         isEmail: true,
         notNull: {
-          msg: "Email is required",
-        },
-      },
+          msg: "Email is required"
+        }
+      }
     },
     phone: {
       type: DataTypes.STRING,
@@ -38,14 +44,14 @@ Supplier.init(
       unique: true,
       validate: {
         notNull: {
-          msg: "Phone number is required",
-        },
-      },
-    },
+          msg: "Phone number is required"
+        }
+      }
+    }
   },
   {
     sequelize,
-    modelName: "Supplier",
+    modelName: "Supplier"
   }
 );
 

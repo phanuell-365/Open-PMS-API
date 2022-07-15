@@ -27,7 +27,6 @@ module.exports = {
           return next(new Error401("You are not logged in."));
         }
 
-        console.log("The request object: ", req);
         req.user = user;
         next();
       }
@@ -45,22 +44,47 @@ module.exports = {
           return next(err);
         }
 
-        console.log("Checking if user is admin ...");
-
-
         if (!user) {
           return next(new Error401("You are not logged in."));
         }
-        if (user.role !== "admin") {
+        if (user.role === "admin") {
+          req.user = user;
+          next();
+        } else {
           return next(
             new Error401("You are not authorized to perform this action.")
           );
         }
 
-        console.log("User is admin");
+      }
+    )(req, res, next);
+  },
 
-        req.user = user;
-        next();
+  isChiefPharmacist(req, res, next) {
+
+    return passport.authenticate(
+      "jwt",
+      {
+        session: false
+      },
+      (err, user) => {
+        if (err) {
+          return next(err);
+        }
+
+        if (!user) {
+          return next(new Error401("You are not logged in."));
+        }
+
+        if (user.role === "chiefPharmacist" || user.role === "admin") {
+          req.user = user;
+          next();
+        } else {
+          return next(
+            new Error401("You are not authorized to perform this action.")
+          );
+        }
+
       }
     )(req, res, next);
   },
@@ -99,7 +123,7 @@ module.exports = {
     )(req, res, next);
   },
 
-  isSalesPerson(req, res, next) {
+  isPharmacyAssistant(req, res, next) {
     return passport.authenticate(
       "jwt",
       {
@@ -112,13 +136,42 @@ module.exports = {
         if (!user) {
           return next(new Error401("You are not logged in."));
         }
-        if (user.role !== "salesperson" || user.role !== "admin") {
+
+        if (user.role === "admin" || user.role === "pharmacyAssistant") {
+          req.user = user;
+          next();
+        } else {
           return next(
             new Error401("You are not authorized to perform this action.")
           );
         }
-        req.user = user;
-        next();
+
+      }
+    )(req, res, next);
+  },
+
+  isPharmacyTechnician(req, res, next) {
+    return passport.authenticate(
+      "jwt",
+      {
+        session: false
+      },
+      (err, user) => {
+        if (err) {
+          return next(err);
+        }
+        if (!user) {
+          return next(new Error401("You are not logged in."));
+        }
+        if (user.role === "pharmacyTechnician" || user.role === "admin") {
+          req.user = user;
+          next();
+        } else {
+          return next(
+            new Error401("You are not authorized to perform this action.")
+          );
+        }
+
       }
     )(req, res, next);
   }

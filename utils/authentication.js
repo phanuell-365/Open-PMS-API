@@ -15,7 +15,7 @@ module.exports = {
       return next();
     } else {
       res.status(401).json({
-        message: "You are not logged in.",
+        message: "You are not logged in."
       });
     }
   },
@@ -33,7 +33,7 @@ module.exports = {
       next();
     } else {
       res.status(401).json({
-        message: "You are not authorized to perform this action.",
+        message: "You are not authorized to perform this action."
       });
     }
   },
@@ -44,7 +44,7 @@ module.exports = {
       next();
     } else {
       res.status(401).json({
-        message: "You are not authorized to perform this action.",
+        message: "You are not authorized to perform this action."
       });
     }
   },
@@ -56,14 +56,14 @@ module.exports = {
    * @param next - This is used to pass the control to the next middleware
    * @returns {*}
    */
-  isSalesPerson: (req, res, next) => {
+  isPharmacyTechnician: (req, res, next) => {
     // Check if the user is authenticated
     if (req.user && req.isAuthenticated() && req.user.role === "salesperson") {
       next();
     } else {
       res.status(401).json({
-        message: "You are not authorized to perform this action.",
+        message: "You are not authorized to perform this action."
       });
     }
-  },
+  }
 };
