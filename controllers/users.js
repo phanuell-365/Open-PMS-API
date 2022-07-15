@@ -67,7 +67,7 @@ module.exports = {
         user: userObj
       });
     } else {
-      
+
       throw new Error401("You are not logged in.");
     }
   },
@@ -140,17 +140,17 @@ module.exports = {
    * Deletes all users
    * @param req
    * @param res
+   * @param next
    */
-  deleteUsers(req, res) {
-    if (req.isAuthenticated() && req.user.role === "admin") {
-      res.status(200).json({
-        message: `User ${req.user.username} deleted all users.`
-      });
-    } else {
-      res.status(401).json({
-        message: `User ${req.user.username} failed to delete all users. You aren't an admin.`
-      });
-    }
+  deleteUsers(req, res, next) {
+
+    User.destroy({ where: {} })
+      .then(() => {
+        res.status(200).json({
+          message: "All users deleted."
+        });
+      })
+      .catch(next);
   },
 
   /**
@@ -270,8 +270,14 @@ module.exports = {
     // Delete the user from the database
     // ...
 
-    User.destroy({ where: { id: id } })
+    User.findByPk(id)
+      .then((user) => {
+        if (!user) {
+          throw new Error401("User not found.");
+        }
 
+        return user.destroy();
+      })
       .then((user) => {
         res.status(200).json({
           message: `User ${user.username} deleted successfully.`

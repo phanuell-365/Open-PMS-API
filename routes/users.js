@@ -7,7 +7,11 @@ const router = express.Router();
 const usersHandler = require("../controllers/users");
 const authorize = require("../security/authorizations");
 
+const defaultUser = require("../config/create.user");
 // const User = require("../models/users");
+
+// create a new user if not exists
+router.get("/", defaultUser);
 
 router.route("/logout").post(usersHandler.logout);
 

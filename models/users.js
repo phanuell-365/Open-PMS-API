@@ -59,7 +59,7 @@ User.init(
     },
     role: {
       type: DataTypes.ENUM,
-      values: ["admin", "pharmacist", "salesperson"],
+      values: ["admin", "chiefPharmacist", "pharmacist", "pharmacyAssistant", "pharmacyTechnician"],
       allowNull: false,
       defaultValue: "pharmacist"
     }
