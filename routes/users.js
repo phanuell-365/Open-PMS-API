@@ -15,6 +15,8 @@ router.route("/login").post(usersHandler.login);
 
 router.route("/login/failed").get(usersHandler.logInFailed);
 
+router.route("/whoami").get(authorize.isAuthenticated, usersHandler.whoAmI);
+
 /* GET users listing. */
 // eslint-disable-next-line no-unused-vars
 router
@@ -23,6 +25,11 @@ router
   .post(authorize.isAdmin, usersHandler.createUser)
   .delete(authorize.isAdmin, usersHandler.deleteUsers);
 
-router.route("/:id").get(authorize.isAdmin);
+router
+  .route("/:id")
+  .get(authorize.isAdmin, usersHandler.getUserById)
+  .put(authorize.isAuthenticated, usersHandler.updateUser)
+  .patch(authorize.isAuthenticated, usersHandler.updateUserAttributes)
+  .delete(authorize.isAdmin, usersHandler.deleteUser);
 
 module.exports = router;

@@ -7,6 +7,12 @@ const bcrypt = require("bcrypt");
 const { Model, DataTypes } = require("sequelize");
 
 class User extends Model {
+
+  static createPasswordHash(password) {
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(password, salt);
+  }
+
   static validatePassword(password, userPassword) {
     return bcrypt.compareSync(password, userPassword);
   }
@@ -19,25 +25,25 @@ User.init(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
       allowNull: false,
-      unique: true,
+      unique: true
     },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: true
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: true
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true,
-      },
+        isEmail: true
+      }
     },
 
     phone: {
@@ -47,16 +53,16 @@ User.init(
       len: [10, 10],
       validate: {
         notNull: {
-          msg: "Phone number is required",
-        },
-      },
+          msg: "Phone number is required"
+        }
+      }
     },
     role: {
       type: DataTypes.ENUM,
       values: ["admin", "pharmacist", "salesperson"],
       allowNull: false,
-      defaultValue: "pharmacist",
-    },
+      defaultValue: "pharmacist"
+    }
   },
   {
     hooks: {
@@ -67,10 +73,10 @@ User.init(
           const salt = bcrypt.genSaltSync(10);
           return bcrypt.hashSync(attributes.password, salt);
         })();
-      },
+      }
     },
     sequelize,
-    modelName: "User",
+    modelName: "User"
   }
 );
 

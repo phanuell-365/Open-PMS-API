@@ -4,7 +4,7 @@
 
 module.exports = {
   /**
-   * Ouput the information about the user.
+   * Output the information about the user.
    */
   user(_user, print = false) {
     const userObj = _user.toJSON();
@@ -14,7 +14,7 @@ module.exports = {
       email: userObj.email,
       username: userObj.username,
       phone: userObj.phone,
-      role: userObj.role,
+      role: userObj.role
     };
 
     if (print) {
@@ -22,5 +22,5 @@ module.exports = {
     }
 
     return userVal;
-  },
+  }
 };

@@ -30,14 +30,12 @@ sequelize
   .sync()
   // .sync({force: true})
   .then(() => {
-    console.log("Sessions table created");
-  }).then(() => {
 
-  server.listen(port);
-  server.on("error", onError);
-  server.on("listening", onListening);
+    server.listen(port);
+    server.on("error", onError);
+    server.on("listening", onListening);
 
-});
+  });
 
 
 /**
