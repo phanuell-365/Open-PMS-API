@@ -110,7 +110,7 @@ module.exports = {
           return next(new Error401("You are not logged in."));
         }
 
-        if (user.role === "admin" || user.role === "pharmacist") {
+        if (user.role === "admin" || user.role === "pharmacist" || user.role === "chiefPharmacist") {
           req.user = user;
           next();
         } else {
@@ -137,7 +137,7 @@ module.exports = {
           return next(new Error401("You are not logged in."));
         }
 
-        if (user.role === "admin" || user.role === "pharmacyAssistant") {
+        if (user.role === "admin" || user.role === "pharmacyAssistant" || user.role === "chiefPharmacist") {
           req.user = user;
           next();
         } else {
@@ -163,7 +163,7 @@ module.exports = {
         if (!user) {
           return next(new Error401("You are not logged in."));
         }
-        if (user.role === "pharmacyTechnician" || user.role === "admin") {
+        if (user.role === "pharmacyTechnician" || user.role === "admin" || user.role === "chiefPharmacist") {
           req.user = user;
           next();
         } else {

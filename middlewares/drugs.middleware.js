@@ -32,6 +32,8 @@ module.exports = {
       .then((drugs) => {
         if (drugs.length > 0) {
           throw new Error400("Drug already exists.");
+        } else {
+          next();
         }
       })
       .catch(next);
@@ -97,6 +99,8 @@ module.exports = {
 
           // if the request body is empty, return a 400 error
           throw new Error400("Invalid request body.");
+        } else {
+          next();
         }
       })
       .catch(next);

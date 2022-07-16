@@ -11,7 +11,16 @@
 const app = require("../app");
 const debug = require("debug")("restechs-opms:server");
 const http = require("http");
+
+
+/**
+ *  Require models
+ */
+
 const sequelize = require("../config/config.db");
+const Drug = require("../models/drugs");
+const Supplier = require("../models/suppliers");
+const Order = require("../models/order");
 
 /**
  * Get port from environment and store in Express.
@@ -23,12 +32,21 @@ app.set("port", port);
 const server = http.createServer(app);
 
 /**
+ * Define relationships between models
+ */
+
+Drug.hasMany(Order, { constraints: true, onDelete: "CASCADE" });
+Order.belongsTo(Drug, { constraints: true, onDelete: "CASCADE" });
+Supplier.hasMany(Order, { constraints: true, onDelete: "CASCADE" });
+Order.belongsTo(Supplier, { constraints: true, onDelete: "CASCADE" });
+
+/**
  * Sync database and start server.
  */
 
 sequelize
   .sync()
-  // .sync({force: true})
+  // .sync({ force: true })
   .then(() => {
 
     server.listen(port);

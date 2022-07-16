@@ -7,14 +7,26 @@ module.exports = {
    * Output the information about the user.
    */
   supplier(_supplier, print = false) {
-    const supplierObj = _supplier.toJSON();
 
-    const supplierVal = {
-      id: supplierObj.id,
-      name: supplierObj.name,
-      email: supplierObj.email,
-      phone: supplierObj.phone
-    };
+    let supplierVal = {};
+
+    if (_supplier.toJSON) {
+      const supplierObj = _supplier.toJSON();
+
+      supplierVal = {
+        id: supplierObj.id,
+        name: supplierObj.name,
+        email: supplierObj.email,
+        phone: supplierObj.phone
+      };
+    } else {
+      supplierVal = {
+        id: _supplier.id,
+        name: _supplier.name,
+        email: _supplier.email,
+        phone: _supplier.phone
+      };
+    }
 
     if (print) {
       console.log(supplierVal);

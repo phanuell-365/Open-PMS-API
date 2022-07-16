@@ -7,20 +7,36 @@ module.exports = {
    * Output the information about a drug.
    */
   drug(_drug, print = false) {
-    const drugObj = _drug.toJSON();
 
-    const drugVal = {
-      id: drugObj.id,
-      name: drugObj.name,
-      doseForm: drugObj.doseForm,
-      strength: drugObj.strength,
-      levelOfUse: drugObj.levelOfUse
-    };
+    let drugVal = {};
+
+    if (_drug.toJSON) {
+      const drugObj = _drug.toJSON();
+
+      drugVal = {
+        id: drugObj.id,
+        name: drugObj.name,
+        doseForm: drugObj.doseForm,
+        strength: drugObj.strength,
+        levelOfUse: drugObj.levelOfUse
+      };
+
+      return drugVal;
+    } else {
+
+      drugVal = {
+        id: _drug.id,
+        name: _drug.name,
+        doseForm: _drug.doseForm,
+        strength: _drug.strength,
+        levelOfUse: _drug.levelOfUse
+      };
+    }
 
     if (print) {
       console.log(drugVal);
     }
-
+    
     return drugVal;
   },
 
