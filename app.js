@@ -12,10 +12,12 @@ const errorHandler = require("./middlewares/error.middleware");
 
 const usersRouter = require("./routes/users");
 const drugsRouter = require("./routes/drugs");
+const inventoryRouter = require("./routes/inventory");
 const suppliersRouter = require("./routes/suppliers");
 const ordersRouter = require("./routes/orders");
 const salesRouter = require("./routes/sales");
-const deliveriesRouter = require("./routes/deliveries.route");
+const suppliesRouter = require("./routes/supplies");
+const patientsRouter = require("./routes/patients");
 
 const app = express();
 
@@ -46,8 +48,14 @@ app.use(passport.initialize());
 // Get the users routes
 app.use("/api/users", usersRouter);
 
+// Get the patients routes
+app.use("/api/patients", patientsRouter);
+
 // Get the drugs routes
 app.use("/api/drugs", drugsRouter);
+
+// Get the inventory routes
+app.use("/api/inventory", inventoryRouter);
 
 // Get the suppliers routes
 app.use("/api/suppliers", suppliersRouter);
@@ -59,7 +67,7 @@ app.use("/api/orders", ordersRouter);
 app.use("/api/sales", salesRouter);
 
 // Get the deliveries routes
-app.use("/api/deliveries", deliveriesRouter);
+app.use("/api/deliveries", suppliesRouter);
 
 // catch 404 and forward to error handler
 app.all("*", (req, res) => {

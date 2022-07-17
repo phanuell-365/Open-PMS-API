@@ -54,18 +54,15 @@ Drug.init(
       type: DataTypes.STRING,
       allowNull: false
     },
-    issueUnit: {
-      type: DataTypes.ENUM,
-      values: validIssueUnits,
-      allowNull: false
-    },
-    issueUnitPrice: {
-      type: DataTypes.FLOAT,
-      allowNull: false
-    },
+
     expiryDate: {
       type: DataTypes.DATE,
       allowNull: false
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
     }
   },
   {

@@ -4,7 +4,7 @@
 
 const express = require("express");
 const router = express.Router();
-const handlers = require("../controllers/deliveries");
+const handlers = require("../controllers/supplies");
 
 /* GET home page. */
 // eslint-disable-next-line no-unused-vars

@@ -19,8 +19,12 @@ const http = require("http");
 
 const sequelize = require("../config/config.db");
 const Drug = require("../models/drugs");
+const Inventory = require("../models/inventory");
 const Supplier = require("../models/suppliers");
-const Order = require("../models/order");
+const Order = require("../models/orders");
+const Supply = require("../models/supplies");
+const Patient = require("../models/patients");
+const Sale = require("../models/sales");
 
 /**
  * Get port from environment and store in Express.
@@ -35,10 +39,16 @@ const server = http.createServer(app);
  * Define relationships between models
  */
 
+Drug.hasOne(Inventory, { constraints: true, onDelete: "CASCADE" });
+Inventory.belongsTo(Drug, { constraints: true, onDelete: "CASCADE" });
 Drug.hasMany(Order, { constraints: true, onDelete: "CASCADE" });
 Order.belongsTo(Drug, { constraints: true, onDelete: "CASCADE" });
 Supplier.hasMany(Order, { constraints: true, onDelete: "CASCADE" });
 Order.belongsTo(Supplier, { constraints: true, onDelete: "CASCADE" });
+Order.hasMany(Supply, { constraints: true, onDelete: "CASCADE" });
+Supply.belongsTo(Order, { constraints: true, onDelete: "CASCADE" });
+Patient.hasMany(Sale, { constraints: true, onDelete: "CASCADE" });
+Sale.belongsTo(Patient, { constraints: true, onDelete: "CASCADE" });
 
 /**
  * Sync database and start server.

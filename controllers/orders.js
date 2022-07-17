@@ -2,7 +2,7 @@
 
 "use strict";
 
-const Order = require("../models/order");
+const Order = require("../models/orders");
 const Drug = require("../models/drugs");
 const Supplier = require("../models/suppliers");
 const Error400 = require("../errors/400");

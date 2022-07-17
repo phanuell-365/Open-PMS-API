@@ -37,7 +37,7 @@ module.exports = {
 
     console.log("Creating drug ...");
 
-    if (!req.body.name || !req.body.doseForm || !req.body.strength || !req.body.levelOfUse) {
+    if (!req.body.name || !req.body.doseForm || !req.body.strength || !req.body.levelOfUse || !req.body.therapeuticClass) {
       throw new Error400("Invalid request body.");
     }
 
@@ -47,8 +47,6 @@ module.exports = {
       strength,
       levelOfUse,
       therapeuticClass,
-      issueUnit,
-      issueUnitPrice,
       expiryDate
     } = req.body;
 
@@ -58,8 +56,6 @@ module.exports = {
       strength: strength,
       levelOfUse: levelOfUse,
       therapeuticClass: therapeuticClass,
-      issueUnit: issueUnit,
-      issueUnitPrice: issueUnitPrice,
       expiryDate: expiryDate
     })
       .then(drug => {
@@ -108,7 +104,7 @@ module.exports = {
   updateDrug: (req, res, next) => {
     const { id } = req.params;
 
-    if (!req.body.name || !req.body.doseForm || !req.body.strength || !req.body.levelOfUse || !req.body.therapeuticClass || !req.body.issueUnit || !req.body.issueUnitPrice || !req.body.expiryDate) {
+    if (!req.body.name || !req.body.doseForm || !req.body.strength || !req.body.levelOfUse || !req.body.therapeuticClass || !req.body.expiryDate) {
       throw new Error400("Invalid request body.");
     }
 
@@ -118,8 +114,6 @@ module.exports = {
       strength,
       levelOfUse,
       therapeuticClass,
-      issueUnit,
-      issueUnitPrice,
       expiryDate
     } = req.body;
 
@@ -136,8 +130,6 @@ module.exports = {
           strength: strength,
           levelOfUse: levelOfUse,
           therapeuticClass: therapeuticClass,
-          issueUnit: issueUnit,
-          issueUnitPrice: issueUnitPrice,
           expiryDate: expiryDate
         });
 
