@@ -33,35 +33,28 @@ module.exports = {
    * @description - This method is used to create a new patient.
    * @api {post} /api/patients Create a new patient
    */
-  createPatient: (req, res, next) => {
+  addPatient: (req, res, next) => {
     console.log("Creating patient ...");
 
     if (!req.body.name || !req.body.phone || !req.body.dob || !req.body.email) {
       throw new Error400("Invalid request body.");
     }
 
-    const {
-      name,
-      phone,
-      dob,
-      email
-    } = req.body;
-
-    Patient.create({
-      name: name,
-      phone: phone,
-      dob: dob,
-      email: email,
-      age: Patient.calculateAge(dob),
-      blame: req.user.username
+    req.user.createPatient({
+      name: req.body.name,
+      phone: req.body.phone,
+      dob: req.body.dob,
+      email: req.body.email,
+      age: Patient.calculateAge(req.body.dob)
     })
       .then(patient => {
-        res.status(200).json({
+        res.status(201).json({
           success: true,
           message: "Successfully created patient.",
           patient: output.patient(patient)
         });
       })
+
       .catch(next);
   },
 
@@ -71,9 +64,7 @@ module.exports = {
    */
   deleteAllPatients: (req, res, next) => {
     Patient.destroy({
-      where: {
-        blame: req.user.username
-      }
+      where: {}
     })
       .then(() => {
         res.status(200).json({
@@ -135,7 +126,7 @@ module.exports = {
           dob: dob,
           email: email,
           age: Patient.calculateAge(dob),
-          blame: req.user.username
+          UserId: req.user.id
         });
       })
       .then(patient => {
@@ -168,7 +159,7 @@ module.exports = {
           }
           return patient.update({
             age: reqBody.age,
-            blame: req.user.username
+            UserId: req.user.id
           });
         }
       })
@@ -176,13 +167,6 @@ module.exports = {
       .then(patient => {
         return patient.update(reqBody);
       })
-
-      .then(patient => {
-          return patient.update({
-            blame: req.user.username
-          });
-        }
-      )
 
       .then(patient => {
         res.status(200).json({

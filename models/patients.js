@@ -61,26 +61,25 @@ Patient.init({
 
     age: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "Age is required"
-        }
-      }
-    },
-
-    blame: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "Blame is required"
-        }
-      },
-      comment: "Who is responsible for the patient"
+      allowNull: false
+      // validate: {
+      //   notNull: {
+      //     msg: "Age is required"
+      //   }
+      // }
     }
+
   },
   {
+    hooks: {
+      beforeCreate: (patient, options) => {
+        patient.age = Patient.calculateAge(patient.dob);
+      },
+      beforeUpdate: (patient, options) => {
+        patient.age = Patient.calculateAge(patient.dob);
+      }
+    },
+    paranoid: true,
     sequelize,
     modelName: "Patient"
   });

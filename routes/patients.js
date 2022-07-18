@@ -13,7 +13,7 @@ const patientMiddlewares = require("../middlewares/patients.middleware");
 // eslint-disable-next-line no-unused-vars
 router.route("/")
   .get(authorize.isPharmacist, authorize.isPharmacyTechnician, handlers.getAllPatients)
-  .post(authorize.isPharmacist, authorize.isPharmacyTechnician, handlers.createPatient)
+  .post(authorize.isPharmacist, authorize.isPharmacyTechnician, handlers.addPatient)
   .delete(authorize.isChiefPharmacist, handlers.deleteAllPatients);
 
 router.route("/:id")
