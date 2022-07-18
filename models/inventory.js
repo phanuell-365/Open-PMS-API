@@ -64,15 +64,28 @@ Inventory.init({
       comment: "The price of one pack size, e.g. ksh. 1000.00"
     },
 
-    blame: {
-      type: DataTypes.STRING,
+    expiryDate: {
+      type: DataTypes.DATE,
       allowNull: false,
-      comment: "The person responsible for the inventory, e.g. John Doe -> Pharmacist"
+      comment: "The expiry date of the drug"
     }
+
   },
   {
+    hooks: {
+      beforeUpdate(instance, options) {
+        // if (instance.changed("packSizeQuantity")) {
+        //   instance.issueUnitQuantity = instance.packSizeQuantity * instance.issueUnitPerPackSize;
+        // }
+
+        instance.issueUnitQuantity = instance.packSizeQuantity * instance.issueUnitPerPackSize;
+      }
+    },
+    paranoid: true,
     sequelize,
     modelName: "Inventory"
   });
+
+// Inventory.sync({ force: true });
 
 module.exports = Inventory;

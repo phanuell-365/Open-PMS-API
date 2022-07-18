@@ -33,7 +33,7 @@ module.exports = {
       .catch(next);
   },
 
-  createDrug: (req, res, next) => {
+  addDrug: (req, res, next) => {
 
     console.log("Creating drug ...");
 
@@ -46,17 +46,15 @@ module.exports = {
       doseForm,
       strength,
       levelOfUse,
-      therapeuticClass,
-      expiryDate
+      therapeuticClass
     } = req.body;
 
-    Drug.create({
-      name: name,
-      doseForm: doseForm,
-      strength: strength,
-      levelOfUse: levelOfUse,
-      therapeuticClass: therapeuticClass,
-      expiryDate: expiryDate
+    req.user.createDrug({
+      name,
+      doseForm,
+      strength,
+      levelOfUse,
+      therapeuticClass
     })
       .then(drug => {
         res.status(200).json({
@@ -113,8 +111,7 @@ module.exports = {
       doseForm,
       strength,
       levelOfUse,
-      therapeuticClass,
-      expiryDate
+      therapeuticClass
     } = req.body;
 
     Drug.findByPk(id)
@@ -130,7 +127,7 @@ module.exports = {
           strength: strength,
           levelOfUse: levelOfUse,
           therapeuticClass: therapeuticClass,
-          expiryDate: expiryDate
+          UserId: req.user.id
         });
 
       })
@@ -159,6 +156,12 @@ module.exports = {
         }
 
         return drug.update(reqDrug);
+      })
+      .then(drug => {
+        return drug.update({
+            UserId: req.user.id
+          }
+        );
       })
       .then((drug) => {
         res.status(200).json({

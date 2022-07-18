@@ -8,9 +8,9 @@ const handlers = require("../controllers/inventory");
 const authorize = require("../security/authorizations");
 
 router.route("/")
-  .get(authorize.isPharmacist, authorize.isPharmacyTechnician, handlers.getAllInventory)
-  .post(authorize.isPharmacist, authorize.isPharmacyTechnician, handlers.createInventory)
-  .delete(authorize.isChiefPharmacist, handlers.deleteInventory);
+  .get(authorize.isPharmacist, authorize.isPharmacyTechnician, handlers.getAllInventories)
+  .post(authorize.isPharmacist, authorize.isPharmacyTechnician, handlers.addInventory)
+  .delete(authorize.isChiefPharmacist, handlers.deleteAllInventories);
 
 router.route("/:id")
   .get(authorize.isPharmacist, authorize.isPharmacyTechnician, handlers.getInventoryById)

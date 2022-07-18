@@ -53,16 +53,6 @@ Drug.init(
     therapeuticClass: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-
-    expiryDate: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
     }
   },
   {
