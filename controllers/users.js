@@ -18,29 +18,35 @@ module.exports = {
   login(req, res, next) {
     const { username, password } = req.body;
 
-    User.findOne({ where: { username: username } })
+    User.unscoped().findOne({ where: { username: username } })
 
       .then((user) => {
         if (!user) {
-          throw new Error401("Invalid username or password.");
+          throw new Error401("Invalid username.");
         }
 
-        const isValid = User.validatePassword(password, user.password);
+        const isValid = user.validatePassword(password, user.password);
 
         if (!isValid) {
           throw new Error401("Invalid password!");
-        } else {
-          const tokenObject = issueJWT(user);
-
-          const userObj = output.user(user);
-
-          res.status(200).json({
-            success: true,
-            user: userObj,
-            token: tokenObject.token,
-            expiresIn: tokenObject.expires
-          });
         }
+
+        return user.update({
+          active: true
+        });
+      })
+      .then((user) => {
+        return user.reload();
+      })
+      .then((user) => {
+        const tokenObject = issueJWT(user);
+
+        res.status(200).json({
+          success: true,
+          user: output.user(user),
+          token: tokenObject.token,
+          expiresIn: tokenObject.expires
+        });
       })
       .catch(next);
   },
@@ -52,6 +58,21 @@ module.exports = {
    * @param next
    */
   logout(req, res, next) {
+
+    if (!req.user) {
+      throw new Error401("User not logged in.");
+    }
+
+    req.user.update({
+      active: false
+    })
+      .then(() => {
+        res.status(200).json({
+          success: true,
+          message: "Successfully logged out."
+        });
+      })
+      .catch(next);
   },
 
   whoAmI(req, res, next) {
@@ -97,7 +118,8 @@ module.exports = {
       const foundUsers = [];
 
       users.forEach((user) => {
-        foundUsers.push(output.user(user));
+        // foundUsers.push(output.user(user));
+        foundUsers.push(user);
       });
 
       res.status(200).json(foundUsers);
@@ -198,7 +220,7 @@ module.exports = {
 
     const userObj = {
       username,
-      password: User.createPasswordHash(password),
+      password,
       email,
       phone,
       role
@@ -234,10 +256,10 @@ module.exports = {
     const { id } = req.params;
 
     const reqUser = req.body;
-
-    if (reqUser.password) {
-      reqUser.password = User.createPasswordHash(reqUser.password);
-    }
+    //
+    // if (reqUser.password) {
+    //   reqUser.password = User.createPasswordHash(reqUser.password);
+    // }
 
     // Update the user in the database
     // ...

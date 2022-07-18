@@ -68,11 +68,6 @@ Sale.init({
         msg: "Total after discount is required"
       }
     }
-  },
-
-  blame: {
-    type: DataTypes.STRING,
-    allowNull: false
   }
 
 }, {

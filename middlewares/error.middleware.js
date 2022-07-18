@@ -13,27 +13,33 @@ module.exports = (err, req, res, next) => {
   if (err instanceof Error400) {
     return res.status(err.status).json({
       success: false,
-      message: err.message,
+      message: err.message
     });
   } else if (err instanceof Error404) {
     return res.status(err.status).json({
       success: false,
-      message: err.message,
+      message: err.message
     });
   } else if (err instanceof Error500) {
     return res.status(err.status).json({
       success: false,
-      message: err.message,
+      message: err.message
     });
   } else if (err instanceof Error401) {
     return res.status(err.status).json({
       success: false,
-      message: err.message,
+      message: err.message
     });
   } else if (err instanceof Error403) {
     return res.status(err.status).json({
       success: false,
-      message: err.message,
+      message: err.message
+    });
+  } else if (err.name === "SequelizeUniqueConstraintError") {
+    console.log("The type of error is: ", typeof err);
+    return res.status(400).json({
+      success: false,
+      err
     });
   }
   next(err);

@@ -44,7 +44,7 @@ module.exports = {
           return next(err);
         }
 
-        if (!user) {
+        if (!user || !user.active) {
           return next(new Error401("You are not logged in."));
         }
         if (user.role === "admin") {
@@ -72,7 +72,7 @@ module.exports = {
           return next(err);
         }
 
-        if (!user) {
+        if (!user || !user.active) {
           return next(new Error401("You are not logged in."));
         }
 

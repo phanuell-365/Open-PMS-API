@@ -25,12 +25,13 @@ const Order = require("../models/orders");
 const Supply = require("../models/supplies");
 const Patient = require("../models/patients");
 const Sale = require("../models/sales");
+const User = require("../models/users");
 
 /**
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT || "3000");
+const port = normalizePort(process.env.PORT || "4040");
 app.set("port", port);
 
 const server = http.createServer(app);
@@ -39,16 +40,62 @@ const server = http.createServer(app);
  * Define relationships between models
  */
 
+// relationship between a drug and its inventory
 Drug.hasOne(Inventory, { constraints: true, onDelete: "CASCADE" });
 Inventory.belongsTo(Drug, { constraints: true, onDelete: "CASCADE" });
+
+// relationship between a drug and its orders
 Drug.hasMany(Order, { constraints: true, onDelete: "CASCADE" });
 Order.belongsTo(Drug, { constraints: true, onDelete: "CASCADE" });
+
+// relationships between a supplier and its supplies
 Supplier.hasMany(Order, { constraints: true, onDelete: "CASCADE" });
 Order.belongsTo(Supplier, { constraints: true, onDelete: "CASCADE" });
+
+// relationships between an order and its supplies
 Order.hasMany(Supply, { constraints: true, onDelete: "CASCADE" });
 Supply.belongsTo(Order, { constraints: true, onDelete: "CASCADE" });
+
+// relationships between a patient and sales
 Patient.hasMany(Sale, { constraints: true, onDelete: "CASCADE" });
 Sale.belongsTo(Patient, { constraints: true, onDelete: "CASCADE" });
+
+// relationships between a drug its sales
+Drug.hasMany(Sale, { constraints: true, onDelete: "CASCADE" });
+Sale.belongsTo(Drug, { constraints: true, onDelete: "CASCADE" });
+
+/**
+ * Define users' relationships with models
+ */
+
+// relationships between the user and an order
+User.hasMany(Order, { constraints: true, onDelete: "CASCADE" });
+Order.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+
+// relationships between the user sale
+User.hasMany(Sale, { constraints: true, onDelete: "CASCADE" });
+Sale.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+
+// relationships between the user supply
+User.hasMany(Supply, { constraints: true, onDelete: "CASCADE" });
+Supply.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+
+// relationships between the user and a supplier
+User.hasMany(Supplier, { constraints: true, onDelete: "CASCADE" });
+Supplier.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+
+// relationships between the user and a patient
+User.hasMany(Patient, { constraints: true, onDelete: "CASCADE" });
+Patient.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+
+// relationships between the user and inventory
+User.hasMany(Inventory, { constraints: true, onDelete: "CASCADE" });
+Inventory.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+
+// relationships between the user and a drug
+User.hasMany(Drug, { constraints: true, onDelete: "CASCADE" });
+Drug.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+
 
 /**
  * Sync database and start server.
@@ -56,6 +103,7 @@ Sale.belongsTo(Patient, { constraints: true, onDelete: "CASCADE" });
 
 sequelize
   .sync()
+  // .sync({ alter: true })
   // .sync({ force: true })
   .then(() => {
 

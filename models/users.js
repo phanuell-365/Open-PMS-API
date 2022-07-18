@@ -3,19 +3,21 @@
 "use strict";
 
 const sequelize = require("../config/config.db");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
+const sequelizeBcrypt = require("sequelize-bcrypt");
 const { Model, DataTypes } = require("sequelize");
 
 class User extends Model {
 
-  static createPasswordHash(password) {
-    const salt = bcrypt.genSaltSync(10);
-    return bcrypt.hashSync(password, salt);
-  }
-
-  static validatePassword(password, userPassword) {
-    return bcrypt.compareSync(password, userPassword);
-  }
+  // static createPasswordHash(password) {
+  //   const salt = bcrypt.genSaltSync(10);
+  //   return bcrypt.hashSync(password, salt);
+  // }
+  //
+  // static validatePassword(password, userPassword) {
+  //   console.warn("validatePassword", password, userPassword);
+  //   return bcrypt.compareSync(password, userPassword);
+  // }
 }
 
 User.init(
@@ -62,22 +64,44 @@ User.init(
       values: ["admin", "chiefPharmacist", "pharmacist", "pharmacyAssistant", "pharmacyTechnician"],
       allowNull: false,
       defaultValue: "pharmacist"
+    },
+
+    active: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      comment: "Set to true when user is logged in, false when logged out"
     }
   },
   {
-    hooks: {
-      beforeCreate(attributes, options) {
-        attributes.id = attributes.id || DataTypes.UUIDV4();
-
-        attributes.password = (() => {
-          const salt = bcrypt.genSaltSync(10);
-          return bcrypt.hashSync(attributes.password, salt);
-        })();
-      }
-    },
+    // hooks: {
+    //   beforeCreate(attributes, options) {
+    //
+    //     attributes.password = (() => {
+    //       const salt = bcrypt.genSaltSync(10);
+    //       return bcrypt.hashSync(attributes.password, salt);
+    //     })();
+    //   },
+    //
+    //   beforeUpdate(attributes, options) {
+    //     attributes.password = (() => {
+    //       const salt = bcrypt.genSaltSync(10);
+    //       return bcrypt.hashSync(attributes.password, salt);
+    //     })();
+    //   }
+    // },
     sequelize,
-    modelName: "User"
+    modelName: "User",
+    defaultScope: {
+      attributes: { exclude: ["password", "createdAt", "updatedAt"] }
+    }
   }
 );
+
+sequelizeBcrypt(User, {
+  field: "password",
+  rounds: 12,
+  compare: "validatePassword"
+});
 
 module.exports = User;

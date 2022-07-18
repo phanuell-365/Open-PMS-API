@@ -13,11 +13,11 @@ const defaultUser = require("../config/create.user");
 // create a new user if not exists
 router.get("/", defaultUser);
 
-router.route("/logout").post(usersHandler.logout);
-
 router.route("/login").post(usersHandler.login);
 
-router.route("/login/failed").get(usersHandler.logInFailed);
+router.route("/logout").post(authorize.isAuthenticated, usersHandler.logout);
+
+// router.route("/login/failed").get(usersHandler.logInFailed);
 
 router.route("/whoami").get(authorize.isAuthenticated, usersHandler.whoAmI);
 

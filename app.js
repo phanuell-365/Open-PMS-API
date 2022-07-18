@@ -66,8 +66,8 @@ app.use("/api/orders", ordersRouter);
 // Get the sales routes
 app.use("/api/sales", salesRouter);
 
-// Get the deliveries routes
-app.use("/api/deliveries", suppliesRouter);
+// Get the supplies routes
+app.use("/api/supplies", suppliesRouter);
 
 // catch 404 and forward to error handler
 app.all("*", (req, res) => {
@@ -75,5 +75,16 @@ app.all("*", (req, res) => {
 });
 
 app.use(errorHandler);
+
+// create a final error handler
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(err.status || 500).json({
+    success: false,
+    name: err.name || "Internal Server Error",
+    message: err.message,
+    err
+  });
+});
 
 module.exports = app;
