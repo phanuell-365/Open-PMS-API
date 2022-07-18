@@ -8,6 +8,6 @@ const handlers = require("../controllers/supplies");
 
 /* GET home page. */
 // eslint-disable-next-line no-unused-vars
-router.route("/").get(handlers.get).post(handlers.post).delete(handlers.delete);
+router.route("/").get(handlers.getAllSupplies).post(handlers.addSupply).delete(handlers.delete);
 
 module.exports = router;

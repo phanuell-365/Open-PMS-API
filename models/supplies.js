@@ -47,27 +47,8 @@ Supply.init({
         msg: "Discount is required"
       }
     }
-  },
-
-  date: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-    allowNull: false,
-    validate: {
-      notNull: {
-        msg: "Date is required"
-      }
-    }
-  },
-
-  blame: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notNull: {}
-    },
-    comment: "Who is responsible for the supply"
   }
+
 }, {
   sequelize,
   modelName: "Supply"
