@@ -19,19 +19,16 @@ Order.init({
     allowNull: false
   },
 
-  packSize: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-
-  packSizeQuantity: {
+  orderQuantity: {
     type: DataTypes.INTEGER,
     allowNull: false,
     validate: {
       notNull: {
-        msg: "Pack size cost is required"
+        msg: "Order quantity is required"
       }
-    }
+    },
+    defaultValue: 0,
+    comment: "The number of pack sizes of the supply ordered"
   },
 
   state: {
@@ -39,19 +36,10 @@ Order.init({
     values: validOrderStates,
     defaultValue: "pending",
     allowNull: false
-  },
-
-  date: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-    allowNull: false,
-    validate: {
-      notNull: {
-        msg: "Date is required"
-      }
-    }
   }
+
 }, {
+  paranoid: true,
   sequelize,
   modelName: "Order"
 });

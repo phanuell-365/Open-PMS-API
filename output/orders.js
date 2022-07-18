@@ -32,10 +32,8 @@ module.exports = {
       orderVal = {
         id: orderObj.id,
         quantity: orderObj.quantity,
-        packSize: orderObj.packSize,
-        packSizeQuantity: orderObj.packSizeQuantity,
-        date: orderObj.date,
-        status: orderObj.status,
+        date: orderObj.createdAt,
+        state: orderObj.state,
         drug: orderObj.DrugId,
         supplier: orderObj.SupplierId
       };
