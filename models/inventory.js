@@ -72,15 +72,15 @@ Inventory.init({
 
   },
   {
-    hooks: {
-      beforeUpdate(instance, options) {
-        // if (instance.changed("packSizeQuantity")) {
-        //   instance.issueUnitQuantity = instance.packSizeQuantity * instance.issueUnitPerPackSize;
-        // }
-
-        instance.issueUnitQuantity = instance.packSizeQuantity * instance.issueUnitPerPackSize;
-      }
-    },
+    // hooks: {
+    //   beforeUpdate(instance, options) {
+    //     // if (instance.changed("packSizeQuantity")) {
+    //     //   instance.issueUnitQuantity = instance.packSizeQuantity * instance.issueUnitPerPackSize;
+    //     // }
+    //
+    //     instance.issueUnitQuantity += instance.packSizeQuantity * instance.issueUnitPerPackSize;
+    //   }
+    // },
     paranoid: true,
     sequelize,
     modelName: "Inventory"

@@ -19,7 +19,7 @@ Supply.init({
     unique: true
   },
 
-  quantity: {
+  packSizeQuantity: {
     type: DataTypes.INTEGER,
     allowNull: false,
     validate: {
@@ -29,7 +29,7 @@ Supply.init({
     }
   },
 
-  price: {
+  pricePerPackSize: {
     type: DataTypes.INTEGER,
     allowNull: false,
     validate: {
@@ -39,17 +39,18 @@ Supply.init({
     }
   },
 
-  discount: {
+  totalPackSizePrice: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    validate: {
-      notNull: {
-        msg: "Discount is required"
-      }
-    }
+    defaultValue: 0
   }
 
 }, {
+  // hooks: {
+  //   beforeCreate(attributes, options) {
+  //     attributes.totalPackSizePrice = attributes.pricePerPackSize * attributes.packSizeQuantity;
+  //   }
+  // },
   sequelize,
   modelName: "Supply"
 });

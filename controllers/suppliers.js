@@ -28,7 +28,7 @@ module.exports = {
       .catch(next);
   },
 
-  createSupplier: (req, res, next) => {
+  addNewSupplier: (req, res, next) => {
 
     console.log("Creating supplier ...");
 
@@ -42,10 +42,10 @@ module.exports = {
       phone
     } = req.body;
 
-    Supplier.create({
-      name: name,
-      email: email,
-      phone: phone
+    return req.user.createSupplier({
+      name,
+      email,
+      phone
     })
       .then((supplier) => {
         res.status(200).json({

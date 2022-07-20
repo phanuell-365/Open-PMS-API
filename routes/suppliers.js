@@ -10,15 +10,15 @@ const authorize = require("../security/authorizations");
 /* GET home page. */
 // eslint-disable-next-line no-unused-vars
 router.route("/")
-  .get(handlers.getAllSuppliers)
-  .post(handlers.createSupplier)
-  .delete(handlers.deleteSuppliers);
+  .get(authorize.isChiefPharmacist, handlers.getAllSuppliers)
+  .post(authorize.isChiefPharmacist, handlers.addNewSupplier)
+  .delete(authorize.isChiefPharmacist, handlers.deleteSuppliers);
 
 router.route("/:id")
-  .get(handlers.getSupplier)
-  .put(handlers.updateSupplier)
-  .patch(handlers.updateSupplierAttributes)
-  .delete(handlers.deleteSupplier);
+  .get(authorize.isChiefPharmacist, handlers.getSupplier)
+  .put(authorize.isChiefPharmacist, handlers.updateSupplier)
+  .patch(authorize.isChiefPharmacist, handlers.updateSupplierAttributes)
+  .delete(authorize.isChiefPharmacist, handlers.deleteSupplier);
 
 
 module.exports = router;

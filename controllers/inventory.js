@@ -23,7 +23,7 @@ module.exports = {
 
         res.status(200).json({
           success: true,
-          inventory: output.inventoryList(inventory)
+          inventory
         });
       })
       .catch(next);
@@ -82,7 +82,7 @@ module.exports = {
         res.status(201).json({
           success: true,
           message: "Inventory created successfully.",
-          inventory: output.inventory(inventory)
+          inventory
         });
       }).catch(next);
   },
@@ -119,7 +119,7 @@ module.exports = {
         res.status(200).json({
           success: true,
           message: "Inventory retrieved successfully.",
-          inventory: output.inventory(inventory)
+          inventory
         });
       })
       .catch(next);
@@ -164,7 +164,7 @@ module.exports = {
       res.status(200).json({
         success: true,
         message: "Inventory updated successfully.",
-        inventory: output.inventory(inventory)
+        inventory
       });
     }).catch(next);
   },
@@ -196,7 +196,7 @@ module.exports = {
         res.status(200).json({
           success: true,
           message: "Inventory updated successfully.",
-          inventory: output.inventory(inventory)
+          inventory
         });
       })
       .catch(next);

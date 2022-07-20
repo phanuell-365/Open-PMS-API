@@ -53,33 +53,11 @@ module.exports = {
     } = req.body;
 
     Drug.findByPk(drug)
-      .then(drug => {
-        if (!drug) {
+      .then(_drug => {
+        if (!_drug) {
           throw new Error400("Drug not found.");
         }
-
-        // update the inventory
-        return drug.getInventory();
-      })
-      .then(inventory => {
-
-        if (!inventory) {
-          throw new Error400("Inventory not found.");
-        }
-
-        const newInventoryQuantity = inventory.packSizeQuantity + orderQuantity;
-
-        return inventory.update({
-          packSizeQuantity: newInventoryQuantity
-        });
-      })
-      .then(inventory => {
-        console.log("Inventory updated successfully.", inventory);
-
-        return Drug.findByPk(drug);
-      })
-      .then(_drug => {
-
+  
         return _drug.createOrder({
           orderQuantity,
           SupplierId: supplier,
@@ -87,7 +65,7 @@ module.exports = {
         });
       })
       .then(order => {
-        console.log(order);
+
         res.status(200).json({
           success: true,
           message: "Order created successfully.",
