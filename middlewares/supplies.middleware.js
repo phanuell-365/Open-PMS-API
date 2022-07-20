@@ -23,7 +23,7 @@ module.exports = {
    * @param res - The response object.
    * @param next - The next middleware function.
    */
-  updateInventoryPackSizeQuantity: (req, res, next) => {
+  updateInventoryPackSizeQuantityAfterSupply: (req, res, next) => {
 
     Promise.resolve()
       .then(

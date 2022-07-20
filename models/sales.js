@@ -19,18 +19,7 @@ Sale.init({
 
   },
 
-  date: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-    allowNull: false,
-    validate: {
-      notNull: {
-        msg: "Date is required"
-      }
-    }
-  },
-
-  quantity: {
+  issueUnitQuantity: {
     type: DataTypes.INTEGER,
     allowNull: false,
     validate: {
@@ -40,37 +29,33 @@ Sale.init({
     }
   },
 
-  total: {
+  issueUnitPrice: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    validate: {
-      notNull: {
-        msg: "Total is required"
-      }
-    }
+    defaultValue: 0
   },
 
-  discount: {
+  totalPrice: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    validate: {
-      notNull: {
-        msg: "Discount is required"
-      }
-    }
+    defaultValue: 0
   },
 
-  totalAfterDiscount: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    validate: {
-      notNull: {
-        msg: "Total after discount is required"
-      }
-    }
+  state: {
+    type: DataTypes.ENUM,
+    values: ["pending", "issued", "cancelled"],
+    defaultValue: "pending"
   }
 
 }, {
+  // hooks: {
+  //   beforeCreate(attributes, options) {
+  //
+  //     const issueUnitPrice = Number.parseInt(attributes.issueUnitPrice);
+  //     console.log("issueUnitPrice", issueUnitPrice);
+  //     attributes.totalPrice = attributes.issueUnitQuantity * issueUnitPrice;
+  //   }
+  // },
   sequelize,
   modelName: "Sale"
 });

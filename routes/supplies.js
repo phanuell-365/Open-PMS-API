@@ -14,7 +14,7 @@ router.route("/")
   .get(authorize.isPharmacyTechnician, handlers.getAllSupplies)
   .post(
     authorize.isPharmacyTechnician,
-    suppliesMiddleware.updateInventoryPackSizeQuantity,
+    suppliesMiddleware.updateInventoryPackSizeQuantityAfterSupply,
     handlers.addSupply
   )
   .delete(authorize.isChiefPharmacist, handlers.delete);

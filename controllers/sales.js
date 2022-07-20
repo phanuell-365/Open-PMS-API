@@ -4,9 +4,11 @@
 
 const Sale = require("../models/sales");
 const Drug = require("../models/drugs");
+const Patient = require("../models/patients");
 const Inventory = require("../models/inventory");
 const Error400 = require("../errors/400");
 const output = require("../output/sales");
+const middleware = require("../middlewares/sales.middleware");
 
 module.exports = {
 
@@ -14,7 +16,15 @@ module.exports = {
     Sale.findAll({
       include: [
         {
-          model: Drug
+          model: Drug,
+          include: [
+            {
+              model: Inventory
+            }
+          ]
+        },
+        {
+          model: Patient
         }
       ]
     })
@@ -23,47 +33,54 @@ module.exports = {
           throw new Error400("No sales found.");
         }
 
-        const salesList = output.salesList(sales);
-
         res.status(200).json({
           success: true,
           message: "Retrieved all sales successfully.",
-          sales: salesList
+          sales
         });
       })
       .catch(next);
   },
 
-  createSale(req, res, next) {
+  makeSale(req, res, next) {
 
     console.log("Creating sales ...");
 
-    if (!req.body.drug || !req.body.quantity || !req.body.price) {
+    if (!req.body.drug || !req.body.issueUnitQuantity || !req.body.patient) {
       throw new Error400("Invalid request body.");
     }
 
-    const {
-      drug, // drugId
-      quantity, // quantity
-      price // price
-    } = req.body;
+    const { patient: PatientId } = req.body;
 
-    Drug.findByPk(drug)
-      .then(drug => {
-        if (!drug) {
-          throw new Error400("Drug not found.");
+    Patient.findByPk(PatientId)
+      .then((patient) => {
+
+        if (!patient) {
+          throw new Error400("Patient not found.");
         }
-        return drug;
-      })
-      .then(drug => {
-        return drug.createSale({
-          quantity,
-          price
+
+        const {
+          drug: DrugId,
+          issueUnitPrice: saleIssueUnitPrice,
+          issueUnitQuantity: saleIssueUnitQuantity,
+          totalPrice: totalSalePrice
+        } = req.body;
+
+        return patient.createSale({
+          DrugId,
+          issueUnitPrice: saleIssueUnitPrice,
+          issueUnitQuantity: saleIssueUnitQuantity,
+          totalPrice: totalSalePrice,
+          UserId: req.user.id
         });
       })
       .then(sale => {
+
+        console.log("Sale created successfully.", sale);
+
         res.status(201).json({
           success: true,
+          message: "Sale created successfully.",
           sale: sale
         });
       })
