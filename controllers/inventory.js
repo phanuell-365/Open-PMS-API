@@ -23,7 +23,7 @@ module.exports = {
 
         res.status(200).json({
           success: true,
-          inventory
+          inventory: output.inventoryList(inventory)
         });
       })
       .catch(next);

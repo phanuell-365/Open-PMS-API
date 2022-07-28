@@ -9,13 +9,23 @@ module.exports = {
   sale(_sale, print = false) {
     const saleObj = _sale.toJSON();
 
+    const dayOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric"
+
+    };
+
     let saleVal = {
       id: saleObj.id,
-      patient: saleObj.patient,
-      drug: saleObj.drug,
-      quantity: saleObj.quantity,
-      price: saleObj.price,
-      date: saleObj.date
+      patient: saleObj.Patient.name,
+      drug: saleObj.Drug.name,
+      issueUnitQuantity: saleObj.issueUnitQuantity,
+      totalPrice: saleObj.totalPrice,
+      date: saleObj.createdAt.toLocaleDateString("en-US", dayOptions)
     };
 
     if (print) {

@@ -46,9 +46,40 @@ module.exports = {
     return orderVal;
   },
 
+  fewOrderDetails(_order, print = false) {
+
+    const orderObj = _order.toJSON();
+    let orderVal = {};
+
+    const dayOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric"
+    };
+
+    orderVal = {
+      id: orderObj.id,
+      orderQuantity: orderObj.orderQuantity,
+      state: orderObj.state,
+      drug: orderObj.Drug.name,
+      supplier: orderObj.Supplier.name,
+      date: orderObj.createdAt.toLocaleDateString("en-US", dayOptions)
+    };
+
+    if (print) {
+      console.log(orderVal);
+    }
+
+    return orderVal;
+  },
+
   orderList(orders) {
     return orders.map(order => {
-      return this.order(order);
+      return this.fewOrderDetails(order);
     });
   }
 };

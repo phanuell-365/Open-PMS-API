@@ -14,32 +14,23 @@ module.exports = {
     const inventoryObj = _inventory.toJSON();
     let inventoryVal = {};
 
-    if (inventoryObj.Drug) {
+    const dayOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    };
 
-      inventoryVal = {
-        id: inventoryObj.id,
-        // drug: inventoryObj.drug,
-        issueUnit: inventoryObj.issueUnit,
-        issueUnitPrice: inventoryObj.issueUnitPrice,
-        issueUnitQuantity: inventoryObj.issueUnitQuantity,
-        packSize: inventoryObj.packSize,
-        packSizeQuantity: inventoryObj.packSizeQuantity,
-        status: inventoryObj.status,
-        drug: drugOutput.drug(inventoryObj.Drug),
-        // supplier: orderObj.supplier
-      };
-    } else {
-      inventoryVal = {
-        id: inventoryObj.id,
-        issueUnit: inventoryObj.issueUnit,
-        issueUnitPrice: inventoryObj.issueUnitPrice,
-        issueUnitQuantity: inventoryObj.issueUnitQuantity,
-        packSize: inventoryObj.packSize,
-        packSizeQuantity: inventoryObj.packSizeQuantity,
-        status: inventoryObj.status,
-        drug: inventoryObj.DrugId,
-      };
-    }
+    inventoryVal = {
+      id: inventoryObj.id,
+      drug: inventoryObj.Drug.name,
+      issueUnit: inventoryObj.issueUnit,
+      issueUnitPrice: inventoryObj.issueUnitPrice,
+      issueUnitPerPackSize: inventoryObj.issueUnitPerPackSize,
+      packSize: inventoryObj.packSize,
+      packSizePrice: inventoryObj.packSizePrice,
+      expiryDate: inventoryObj.expiryDate.toLocaleDateString("en-US", dayOptions)
+    };
 
     if (print) {
       console.log(inventoryVal);

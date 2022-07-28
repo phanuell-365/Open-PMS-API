@@ -51,7 +51,7 @@ module.exports = {
         res.status(201).json({
           success: true,
           message: "Successfully created patient.",
-          patient: output.patient(patient)
+          PatientId: patient.id
         });
       })
 
@@ -132,8 +132,8 @@ module.exports = {
       .then(patient => {
         res.status(200).json({
           success: true,
-          message: "Successfully updated patient.",
-          patient: output.patient(patient)
+          message: "Successfully updated patient."
+          // patient: output.patient(patient)
         });
       })
       .catch(next);
@@ -171,8 +171,8 @@ module.exports = {
       .then(patient => {
         res.status(200).json({
           success: true,
-          message: "Successfully updated patient.",
-          patient: output.patient(patient)
+          message: "Successfully updated patient."
+          // patient: output.patient(patient)
         });
       })
       .catch(next);

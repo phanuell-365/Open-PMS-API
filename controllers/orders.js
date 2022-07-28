@@ -26,13 +26,15 @@ module.exports = {
         if (orders.length === 0) {
           throw new Error400("No orders found.");
         }
+
+        output.fewOrderDetails(orders[0], true);
         //
         // const orderList = output.orderList(orders);
 
         console.log(Order);
         res.status(200).json({
           success: true,
-          orders
+          orders: output.orderList(orders)
         });
       })
       .catch(next);
@@ -57,7 +59,7 @@ module.exports = {
         if (!_drug) {
           throw new Error400("Drug not found.");
         }
-  
+
         return _drug.createOrder({
           orderQuantity,
           SupplierId: supplier,
@@ -124,12 +126,10 @@ module.exports = {
           throw new Error400("Order not found.");
         }
 
-        console.log("The order is: ", order.toJSON());
-
         res.status(200).json({
           success: true,
           message: "Order retrieved successfully.",
-          order: output.order(order)
+          order: output.fewOrderDetails(order)
         });
       })
       .catch(next);

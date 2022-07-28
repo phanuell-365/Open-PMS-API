@@ -16,12 +16,7 @@ module.exports = {
     Sale.findAll({
       include: [
         {
-          model: Drug,
-          include: [
-            {
-              model: Inventory
-            }
-          ]
+          model: Drug
         },
         {
           model: Patient
@@ -36,7 +31,7 @@ module.exports = {
         res.status(200).json({
           success: true,
           message: "Retrieved all sales successfully.",
-          sales
+          sales: output.saleList(sales, true)
         });
       })
       .catch(next);
@@ -100,6 +95,9 @@ module.exports = {
       include: [
         {
           model: Drug
+        },
+        {
+          model: Patient
         }
       ]
     })
