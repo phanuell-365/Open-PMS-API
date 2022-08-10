@@ -25,7 +25,7 @@ router.route("/whoami").get(authorize.isAuthenticated, usersHandler.whoAmI);
 // eslint-disable-next-line no-unused-vars
 router
   .route("/")
-  .get(authorize.isAdmin, usersHandler.getUsers)
+  .get(authorize.isAdmin, usersHandler.getUserRoles, usersHandler.getUsers)
   .post(authorize.isAdmin, usersHandler.createUser)
   .delete(authorize.isAdmin, usersHandler.deleteUsers);
 

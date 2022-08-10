@@ -4,8 +4,10 @@
 
 const User = require("../models/users");
 const Error401 = require("../errors/401");
+const Error400 = require("../errors/400");
 const issueJWT = require("../security/issueJWT");
 const output = require("../output/users");
+const { roles } = require("../data/users");
 
 module.exports = {
 
@@ -16,7 +18,14 @@ module.exports = {
    * @param next
    */
   login(req, res, next) {
+
+    console.log("The request body is: ", req.body);
+
     const { username, password } = req.body;
+
+    if (!username || !password) {
+      throw new Error400("Invalid request body. Missing username or password.");
+    }
 
     User.unscoped().findOne({ where: { username: username } })
 
@@ -43,9 +52,10 @@ module.exports = {
 
         res.status(200).json({
           success: true,
-          user: output.user(user),
+          UserId: user.id,
           token: tokenObject.token,
-          expiresIn: tokenObject.expires
+          expiresIn: tokenObject.expires,
+          isAdmin: user.role === "admin"
         });
       })
       .catch(next);
@@ -126,6 +136,22 @@ module.exports = {
     });
   },
 
+  getUserRoles(req, res, next) {
+
+    if (Object.keys(req.query).length === 0) {
+      next();
+    } else if (req.query.search === "roles") {
+      res.status(200).json({
+        success: true,
+        roles
+      });
+    } else if (req.query.search !== "roles") {
+      throw new Error400("Failed to get roles. No roles specified.");
+    }
+
+
+  },
+
   /**
    * @api {post} /api/users Create a new user
    * Register a new user
@@ -134,6 +160,10 @@ module.exports = {
    * @param next - This is used to pass the control to the next middleware
    */
   createUser(req, res, next) {
+
+    if (!req.body.username || !req.body.password || !req.body.email || !req.body.phone) {
+      throw new Error400("Failed to create user. Missing username, password, email or phone.");
+    }
     const { username, password, email, phone, role } = req.body;
 
     const user = {

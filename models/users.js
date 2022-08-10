@@ -6,6 +6,7 @@ const sequelize = require("../config/config.db");
 // const bcrypt = require("bcrypt");
 const sequelizeBcrypt = require("sequelize-bcrypt");
 const { Model, DataTypes } = require("sequelize");
+const { roles } = require("../data/users");
 
 class User extends Model {
 
@@ -61,7 +62,7 @@ User.init(
     },
     role: {
       type: DataTypes.ENUM,
-      values: ["admin", "chiefPharmacist", "pharmacist", "pharmacyAssistant", "pharmacyTechnician"],
+      values: roles,
       allowNull: false,
       defaultValue: "pharmacist"
     },
