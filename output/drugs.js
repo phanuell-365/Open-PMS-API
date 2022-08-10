@@ -18,7 +18,8 @@ module.exports = {
         name: drugObj.name,
         doseForm: drugObj.doseForm,
         strength: drugObj.strength,
-        levelOfUse: drugObj.levelOfUse
+        levelOfUse: drugObj.levelOfUse,
+        therapeuticClass: drugObj.therapeuticClass
       };
 
       return drugVal;
@@ -29,14 +30,15 @@ module.exports = {
         name: _drug.name,
         doseForm: _drug.doseForm,
         strength: _drug.strength,
-        levelOfUse: _drug.levelOfUse
+        levelOfUse: _drug.levelOfUse,
+        therapeuticClass: _drug.therapeuticClass
       };
     }
 
     if (print) {
       console.log(drugVal);
     }
-    
+
     return drugVal;
   },
 

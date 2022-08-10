@@ -11,7 +11,7 @@ const drugMiddlewares = require("../middlewares/drugs.middleware");
 /* GET home page. */
 // eslint-disable-next-line no-unused-vars
 router.route("/")
-  .get(authorize.isPharmacist, handlers.getAllDrugs)
+  .get(authorize.isPharmacist, handlers.getDrugDoseForms, handlers.getDrugIssueUnits, handlers.getAllDrugs)
   .post(authorize.isPharmacist, drugMiddlewares.isRequestBodyEmpty, drugMiddlewares.isDrugUnique, handlers.addDrug)
   .delete(authorize.isAdmin, handlers.deleteAllDrugs);
 

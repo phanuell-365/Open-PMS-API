@@ -5,6 +5,7 @@
 const Drug = require("../models/drugs");
 const Error400 = require("../errors/400");
 const output = require("../output/drugs");
+const { validDrugForms, validIssueUnits } = require("../data/drugs");
 
 module.exports = {
 
@@ -33,6 +34,41 @@ module.exports = {
       .catch(next);
   },
 
+  getDrugDoseForms: (req, res, next) => {
+
+    // check if the search is inside the query string
+    if (!req.query.search) {
+      next();
+    } else {
+      // check if the search's value is equal to doseForm
+      if (req.query.search === "dose-form") {
+        res.status(200).json({
+          success: true,
+          drugDoseForms: validDrugForms
+        });
+      } else {
+        next();
+      }
+    }
+  },
+
+  getDrugIssueUnits: (req, res, next) => {
+
+    // check if the search is inside the query string
+    if (!req.query.search) {
+      next();
+    } else {
+      // check if the search's value is equal to issueUnit
+      if (req.query.search === "issue-unit") {
+        res.status(200).json({
+          success: true,
+          drugIssueUnits: validIssueUnits
+        });
+      } else {
+        next();
+      }
+    }
+  },
   addDrug: (req, res, next) => {
 
     console.log("Creating drug ...");
