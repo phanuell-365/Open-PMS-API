@@ -39,6 +39,44 @@ module.exports = {
       })
       .catch(next);
   },
+  getPendingOrders: (req, res, next) => {
+    if (!req.query.status) {
+      next();
+    } else {
+      if (req.query.status === "pending") {
+        Order.findAll({
+          where: {
+            status: {
+              [Op.eq]: "pending"
+            }
+          },
+          include: [
+            {
+              model: Drug
+            },
+            {
+              model: Supplier
+            }
+          ]
+        })
+          .then(orders => {
+            if (orders.length === 0) {
+              throw new Error400("No pending orders found.");
+            }
+
+            const orderList = output.orderList(orders);
+
+            res.status(200).json({
+              success: true,
+              orders: orderList
+            });
+          })
+          .catch(next);
+      } else {
+        next();
+      }
+    }
+  },
 
   makeAnOrder: (req, res, next) => {
 

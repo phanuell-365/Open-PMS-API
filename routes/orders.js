@@ -12,7 +12,7 @@ const orderMiddlewares = require("../middlewares/orders.middleware");
 /* GET home page. */
 // eslint-disable-next-line no-unused-vars
 router.route("/")
-  .get(authorize.isPharmacist, authorize.isPharmacyTechnician, handlers.getAllOrders)
+  .get(authorize.isPharmacist, authorize.isPharmacyTechnician, handlers.getPendingOrders, handlers.getAllOrders)
   .post(authorize.isPharmacist, authorize.isPharmacyTechnician, handlers.makeAnOrder)
   .delete(authorize.isChiefPharmacist, handlers.cancelOrders);
 
